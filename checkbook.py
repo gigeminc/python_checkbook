@@ -10,6 +10,11 @@ def append_dict(transaction):
     with open(filename, 'w') as json_file:
         json.dump(data, json_file, sort_keys = True, indent = 4)
 # ---------------------------------
+def overwrite_dict(x):
+    with open(filename, 'w') as json_file:
+        json.dump(x, json_file, sort_keys = True, indent = 4)
+
+# ---------------------------------
 def get_balance():
     all_transactions = []
     for i in data:
@@ -19,6 +24,7 @@ def get_balance():
 
 # ----------------------------------
 def withdraw_balance():
+    filename = "Codeup_checkbook.json"
     valid_input = False
     deduct_amount = 0
     while valid_input == False:
@@ -27,13 +33,15 @@ def withdraw_balance():
             break
         else:
             try:
+                # sets data to global scope so that it can be modified within the function
+                global data
                 deduct_amount = float(deduct_input)
                 if deduct_amount > 0:
                     deduct_amount = 0 - deduct_amount
                 c = input('Category for withdraw? ')
                 desc = input('Input a description for this transaction or press Enter to skip: ')
                 if desc == '':
-                    desc = None
+                    desc = ' '
                 transaction = {}
                 transaction['transaction'] = 'withdraw'
                 transaction['category'] = c
@@ -42,6 +50,10 @@ def withdraw_balance():
                 transaction['amount'] = deduct_amount
                 transaction['description'] = desc
                 append_dict(transaction)
+                data_with_new_transaction = json.load(open(filename))
+                data_with_new_transaction[data_with_new_transaction.index(transaction)]['transaction_id'] = data_with_new_transaction.index(transaction)
+                overwrite_dict(data_with_new_transaction)
+                data = data_with_new_transaction
                 valid_input = True
             except:
                 print('Invalid input')
@@ -58,6 +70,7 @@ def deposit_balance():
             break
         else:
             try:
+                global data
                 credit_amount = float(deduct_input)
                 if credit_amount < 0:
                     credit_amount = abs(credit_amount)
@@ -73,6 +86,10 @@ def deposit_balance():
                 transaction['time'] = str(d.datetime.now().time())
                 transaction['description'] = desc
                 append_dict(transaction)
+                data_with_new_transaction = json.load(open(filename))
+                data_with_new_transaction[data_with_new_transaction.index(transaction)]['transaction_id'] = data_with_new_transaction.index(transaction)
+                overwrite_dict(data_with_new_transaction)
+                data = data_with_new_transaction
                 valid_input = True
                 print('Your current balance is now ${:,.2f}'.format(get_balance()))
             except:
@@ -84,10 +101,10 @@ def transaction_history():
     n = 0
     amount_total = 0
     temp_list = []
-    print('    |    Date    |      Time       |   Transaction  |   Amount   |  Category   |            Description ')
+    print(' id |    Date    |      Time       |   Transaction  |   Amount   |  Category   |            Description ')
     print('----|------------|-----------------|----------------|------------|-------------|----------------------------------')
     for i in data:
-        print('{:^4}| {:^5} | {:^5} | {:^14} | {:^10} | {:^10}  |   {:^20}'.format((n+1), i['date'], i['time'], i['transaction'], i['amount'], i['category'], i['description']))
+        print('{:^4}| {:^5} | {:^5} | {:^14} | {:^10} | {:^10}  |   {:^20}'.format(i['transaction_id'], i['date'], i['time'], i['transaction'], i['amount'], i['category'], i['description']))
         n += 1
         amount_total = amount_total + i['amount']
         temp_list.append(i)
@@ -100,11 +117,11 @@ def category_search():
     print('\n')
     n = 0
     amount_total = 0
-    print('    |    Date    |      Time       |   Transaction  |   Amount   |  Category   |            Description ')
+    print(' id |    Date    |      Time       |   Transaction  |   Amount   |  Category   |            Description ')
     print('----|------------|-----------------|----------------|------------|-------------|----------------------------------')
     for i in data:
         if i['category'].lower() == defined_category.lower():
-            print('{:^4}| {:^5} | {:^5} | {:^14} | {:^10} | {:^10}  |   {:^20}'.format((n+1), i['date'], i['time'], i['transaction'], i['amount'], i['category'], i['description']))
+            print('{:^4}| {:^5} | {:^5} | {:^14} | {:^10} | {:^10}  |   {:^20}'.format(i['transaction_id'], i['date'], i['time'], i['transaction'], i['amount'], i['category'], i['description']))
             n += 1
             amount_total = amount_total + i['amount']
     print('There are a total of {} transaction(s) totaling an amount of ${:,.2f}'.format(n, amount_total))
@@ -115,35 +132,36 @@ def day_search():
     print('\n')
     n = 0
     amount_total = 0
-    print('    |    Date    |      Time       |   Transaction  |   Amount   |  Category   |            Description ')
+    print(' id |    Date    |      Time       |   Transaction  |   Amount   |  Category   |            Description ')
     print('----|------------|-----------------|----------------|------------|-------------|----------------------------------')
     for i in data:
         if i['date'] == defined_day:
-            print('{:^4}| {:^5} | {:^5} | {:^14} | {:^10} | {:^10}  |   {:^20}'.format((n+1), i['date'], i['time'], i['transaction'], i['amount'], i['category'], i['description']))
+            print('{:^4}| {:^5} | {:^5} | {:^14} | {:^10} | {:^10}  |   {:^20}'.format(i['transaction_id'], i['date'], i['time'], i['transaction'], i['amount'], i['category'], i['description']))
             n += 1
             amount_total = amount_total + i['amount']
     print('There are a total of {} transaction(s) totaling an amount of ${:,.2f}'.format(n, amount_total))
 
 # -------------------------------------
 def desc_search():
-    keywords = input('Please type the keywords to search by separated for a space: ')
+    keywords = input('Please type the keywords to search for separated by a space: ')
     keyword_list = keywords.lower().split(' ')
     n = 0
     amount_total = 0
-    print('    |    Date    |      Time       |   Transaction  |   Amount   |  Category   |            Description ')
+    print(' id |    Date    |      Time       |   Transaction  |   Amount   |  Category   |            Description ')
     print('----|------------|-----------------|----------------|------------|-------------|----------------------------------')
     for i in data:
         desc_list = i['description'].lower().split(' ')
         if set(keyword_list).issubset(desc_list):
-            print('{:^4}| {:^5} | {:^5} | {:^14} | {:^10} | {:^10}  |   {:^20}'.format((n+1), i['date'], i['time'], i['transaction'], i['amount'], i['category'], i['description']))
+            print('{:^4}| {:^5} | {:^5} | {:^14} | {:^10} | {:^10}  |   {:^20}'.format(i['transaction_id'], i['date'], i['time'], i['transaction'], i['amount'], i['category'], i['description']))
             n += 1
             amount_total = amount_total + i['amount']
     print('There are a total of {} transaction(s) totaling an amount of ${:,.2f}'.format(n, amount_total))
 
 # -------------------------------------
 def modify_transaction():
+    global data
     print('\n')
-    transaction_number = int(input('Choose the number of the transaction you would like to modify: '))
+    transaction_number = int(input('Choose the transaction id of the transaction you would like to modify: '))
     print('What information would you like to modify? ')
     print('1) Amount')
     print('2) Category')
@@ -152,11 +170,19 @@ def modify_transaction():
     info_key = ''
     if info_number == 1:
         info_key = 'amount'
+        new_info = float(input('Enter the correct information for {}: '.format(info_key)))
+        if data[transaction_number]['transaction'] == 'withdraw':
+            if new_info > 0:
+                    new_info = 0 - new_info
     if info_number == 2:
         info_key = 'category'
+        new_info = input('Enter the correct information for {}: '.format(info_key))
     if info_number == 3:
         info_key = 'description'
-    temp_list[transaction_number][info_key] = input()
+        new_info = input('Enter the correct information for {}: '.format(info_key))
+    data[transaction_number][info_key] = new_info
+    overwrite_dict(data)
+
 
 
 # -------------------------------------

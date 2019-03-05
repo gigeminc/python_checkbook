@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # # setup user input loop
 # # ----------  write a dummy file to start off with
 # import json
@@ -18,6 +19,30 @@
 # trans = {"transaction": "withdrawl", "category": "groceries", "amount": 682.15}
 # json.dump(trans, open("Codeup_checkbook.txt",'a'))
 
+=======
+# setup user input loop
+# ----------  write a dummy file to start off with
+import json
+filename = "Codeup_checkbook.txt"
+checkbook_lst = [
+    {
+        'transaction': 'append test2',
+        'category': 'giraffe',
+        'amount': 150.34
+    },
+]
+with open(filename, 'a', encoding='utf-8') as file:
+    for item in checkbook_lst:
+        x = json.dumps(item, indent=4)
+        file.write(x + '\n')
+#  now read it back
+with open(filename, "r") as read_file:
+    transactions = json.load(read_file)
+    for x in transactions:
+         transamount = transactions['amount']
+         action = transaction['category']
+         print(transamount, action)
+>>>>>>> 3f61a3cba6928c093ab1da410dfb909e91df6529
 
 
 

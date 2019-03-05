@@ -78,6 +78,7 @@ def deposit_balance():
                 desc = input('Input a description for this transaction or press Enter to skip: ')
                 if desc == '':
                     desc = ' '
+                # creates an empty dictionary to be filled
                 transaction = {}
                 transaction['transaction'] = 'deposit'
                 transaction['category'] = c
@@ -86,9 +87,13 @@ def deposit_balance():
                 transaction['time'] = str(d.datetime.now().time())
                 transaction['description'] = desc
                 append_dict(transaction)
+                # creates a variable to store the json file that we just modified with the current transaction
                 data_with_new_transaction = json.load(open(filename))
+                # adds id number to current transaction based on index of transaction in list
                 data_with_new_transaction[data_with_new_transaction.index(transaction)]['transaction_id'] = data_with_new_transaction.index(transaction)
+                # overwrites the previous json file so that current transaction now has an id
                 overwrite_dict(data_with_new_transaction)
+                # overwrites global data variable so that it is updated to contain current transaction with id number
                 data = data_with_new_transaction
                 valid_input = True
                 print('Your current balance is now ${:,.2f}'.format(get_balance()))

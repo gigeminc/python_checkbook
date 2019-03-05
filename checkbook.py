@@ -81,23 +81,30 @@ def deposit_balance():
 
 # -------------------------------------
 def transaction_history():
-    print('    Date   |      Time       |   Transaction  |   Amount   |  Category   |            Description ')
-    print('-----------|-----------------|----------------|------------|-------------|-----------------------------------')
+    n = 0
+    amount_total = 0
+    temp_list = []
+    print('    |    Date    |      Time       |   Transaction  |   Amount   |  Category   |            Description ')
+    print('----|------------|-----------------|----------------|------------|-------------|----------------------------------')
     for i in data:
-        print('{:^5} | {:^5} | {:^14} | {:^10} | {:^10}  |   {:^20}'.format(i['date'], i['time'], i['transaction'], i['amount'], i['category'], i['description']))
+        print('{:^4}| {:^5} | {:^5} | {:^14} | {:^10} | {:^10}  |   {:^20}'.format((n+1), i['date'], i['time'], i['transaction'], i['amount'], i['category'], i['description']))
+        n += 1
+        amount_total = amount_total + i['amount']
+        temp_list.append(i)
+    print('There are a total of {} transaction(s) totaling an amount of ${:,.2f}'.format(n, amount_total))
     
 
 # -------------------------------------
-def category_transactions():
+def category_search():
     defined_category = input('What category would you like to filter by? ')
     print('\n')
     n = 0
     amount_total = 0
-    print('    Date   |      Time       |   Transaction  |   Amount   |  Category   |            Description ')
-    print('-----------|-----------------|----------------|------------|-------------|----------------------------------')
+    print('    |    Date    |      Time       |   Transaction  |   Amount   |  Category   |            Description ')
+    print('----|------------|-----------------|----------------|------------|-------------|----------------------------------')
     for i in data:
         if i['category'].lower() == defined_category.lower():
-            print('{:^5} | {:^5} | {:^14} | {:^10} | {:^10}  |   {:^20}'.format(i['date'], i['time'], i['transaction'], i['amount'], i['category'], i['description']))
+            print('{:^4}| {:^5} | {:^5} | {:^14} | {:^10} | {:^10}  |   {:^20}'.format((n+1), i['date'], i['time'], i['transaction'], i['amount'], i['category'], i['description']))
             n += 1
             amount_total = amount_total + i['amount']
     print('There are a total of {} transaction(s) totaling an amount of ${:,.2f}'.format(n, amount_total))
@@ -108,11 +115,11 @@ def day_search():
     print('\n')
     n = 0
     amount_total = 0
-    print('    Date   |      Time       |   Transaction  |   Amount   |  Category   |            Description ')
-    print('-----------|-----------------|----------------|------------|-------------|--------------------------------')
+    print('    |    Date    |      Time       |   Transaction  |   Amount   |  Category   |            Description ')
+    print('----|------------|-----------------|----------------|------------|-------------|----------------------------------')
     for i in data:
         if i['date'] == defined_day:
-            print('{:^5} | {:^5} | {:^14} | {:^10} | {:^10}  |   {:^20}'.format(i['date'], i['time'], i['transaction'], i['amount'], i['category'], i['description']))
+            print('{:^4}| {:^5} | {:^5} | {:^14} | {:^10} | {:^10}  |   {:^20}'.format((n+1), i['date'], i['time'], i['transaction'], i['amount'], i['category'], i['description']))
             n += 1
             amount_total = amount_total + i['amount']
     print('There are a total of {} transaction(s) totaling an amount of ${:,.2f}'.format(n, amount_total))
@@ -121,12 +128,88 @@ def day_search():
 def desc_search():
     keywords = input('Please type the keywords to search by separated for a space: ')
     keyword_list = keywords.lower().split(' ')
-    print('    Date   |      Time       |   Transaction  |   Amount   |  Category   |            Description ')
-    print('-----------|-----------------|----------------|------------|-------------|--------------------------------')
+    n = 0
+    amount_total = 0
+    print('    |    Date    |      Time       |   Transaction  |   Amount   |  Category   |            Description ')
+    print('----|------------|-----------------|----------------|------------|-------------|----------------------------------')
     for i in data:
         desc_list = i['description'].lower().split(' ')
         if set(keyword_list).issubset(desc_list):
-            print('{:^5} | {:^5} | {:^14} | {:^10} | {:^10}  |   {:^20}'.format(i['date'], i['time'], i['transaction'], i['amount'], i['category'], i['description']))
+            print('{:^4}| {:^5} | {:^5} | {:^14} | {:^10} | {:^10}  |   {:^20}'.format((n+1), i['date'], i['time'], i['transaction'], i['amount'], i['category'], i['description']))
+            n += 1
+            amount_total = amount_total + i['amount']
+    print('There are a total of {} transaction(s) totaling an amount of ${:,.2f}'.format(n, amount_total))
+
+# -------------------------------------
+def modify_transaction():
+    print('\n')
+    transaction_number = int(input('Choose the number of the transaction you would like to modify: '))
+    print('What information would you like to modify? ')
+    print('1) Amount')
+    print('2) Category')
+    print('3) Description')
+    info_number = int(input('Please choose 1 - 3: '))
+    info_key = ''
+    if info_number == 1:
+        info_key = 'amount'
+    if info_number == 2:
+        info_key = 'category'
+    if info_number == 3:
+        info_key = 'description'
+    temp_list[transaction_number][info_key] = input()
+
+
+# -------------------------------------
+def modify_menu():
+    print('You have chosen to modify a transaction.')
+    print('First, choose an option below: ')
+    user_choice = 0
+    while user_choice != 4:  
+        print('\n')
+        print('1) View all transactions:')
+        print('2) Search for a transaction by date:')
+        print('3) Search for a transaction by category')
+        print('4) Search for a transaction by description')
+        print('5) Exit to main menu')
+        print('\n')
+        user_choice = input('What would you like to do? Please choose 1-5 (Q to quit): ')
+        print('\n')
+        if user_choice.isdigit() == True:
+            print('\n')
+            if int(user_choice) == 1:
+                transaction_history()
+                modify_transaction()
+                user_choice = 0
+            elif int(user_choice) == 2:
+                day_search()
+                modify_transaction()
+                user_choice = 0
+            elif int(user_choice) == 3:
+                category_search()
+                modify_transaction()
+                user_choice = 0
+            elif int(user_choice) == 4:
+                desc_search()
+                modify_transaction()
+                user_choice = 0
+            elif int(user_choice) == 5:
+                print('user choice = 5')
+                print('\n')
+                break    
+            else:
+                print('I did not understand your choice. Please try again') 
+                print('\n')
+                user_choice = 0
+        else:
+            if user_choice.lower() == 'q':
+                user_choice = 4
+            else:
+                print('I did not understand your choice. Please try again') 
+                print('\n')
+                user_choice = 0
+    
+
+
 
         
 # -------------------------------------
@@ -139,15 +222,15 @@ while user_choice != 4:
     print('3) Record a credit (deposit)')
     print('4) View transaction history')
     print('5) View transactions from a category')
-    print('6) View transactions on a certain day')
+    print('6) View transactions on a certain date')
     print('7) Search transactions by keywords')
-    print('8) Exit')
+    print('8) Modify a transaction')
+    print('9) Exit')
     print('\n')
-    user_choice = input('What would you like to do? Please choose 1-8: ')
+    user_choice = input('What would you like to do? Please choose 1-9 (q to quit): ')
     print('\n')
     if user_choice.isdigit() == True:
         #
-        print('\n')
         if int(user_choice) == 1:
             print('Your current balance is ${:,.2f}.'.format(get_balance()))
             user_choice = 0
@@ -161,7 +244,7 @@ while user_choice != 4:
             transaction_history()
             user_choice = 0
         elif int(user_choice) == 5:
-            category_transactions()
+            category_search()
             user_choice = 0
         elif int(user_choice) == 6:
             day_search()
@@ -170,7 +253,10 @@ while user_choice != 4:
             desc_search()
             user_choice = 0
         elif int(user_choice) == 8:
-            print('user choice = 8')
+            modify_menu()
+            user_choice = 0
+        elif int(user_choice) == 9:
+            print('user choice = 9')
             print('\n')
             break    
         else:

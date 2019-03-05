@@ -121,12 +121,12 @@ def day_search():
 def desc_search():
     keywords = input('Please type the keywords to search by separated for a space: ')
     keyword_list = keywords.lower().split(' ')
-    print('    Date   |      Time       |   Transaction  |   Amount   |  Category')
-    print('-----------|-----------------|----------------|------------|-----------')
+    print('    Date   |      Time       |   Transaction  |   Amount   |  Category   |            Description ')
+    print('-----------|-----------------|----------------|------------|-------------|--------------------------------')
     for i in data:
         desc_list = i['description'].lower().split(' ')
         if set(keyword_list).issubset(desc_list):
-            print('{:^5} | {:^5} | {:^14} | {:^10} | {:^9}'.format(i['date'], i['time'], i['transaction'], i['amount'], i['category']))
+            print('{:^5} | {:^5} | {:^14} | {:^10} | {:^10}  |   {:^20}'.format(i['date'], i['time'], i['transaction'], i['amount'], i['category'], i['description']))
 
         
 # -------------------------------------

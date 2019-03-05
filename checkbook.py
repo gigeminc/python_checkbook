@@ -19,22 +19,6 @@ def get_balance():
 
 # ----------------------------------
 def withdraw_balance():
-#    some code to build the dictionary
-#     like this   transaction = {'transaction': 'deposit', 'category': 'open account', 'amount':25.00 }
-    c = input('Category for withdraw? ')
-    print('\n')
-    a = (int(input('Amount to debit? ')) * -1)
-    print('\n')
-    transaction = {}
-    transaction['transaction'] = 'withdraw'
-    transaction['category'] = c
-    transaction['amount'] = a
-    transaction['date'] = str(d.date.today())
-    transaction['time'] = str(d.datetime.now().time())
-    # transaction = {'transaction': 'withdraw', 'category': 'need to fill in', 'amount': -25.00 }
-    append_dict(transaction)
-    return print('Your current balance is now ${:,.2f}'.format(get_balance()))
-
     valid_input = False
     deduct_amount = 0
     while valid_input == False:
@@ -53,7 +37,6 @@ def withdraw_balance():
                 transaction['date'] = str(d.date.today())
                 transaction['time'] = str(d.datetime.now().time())
                 transaction['amount'] = deduct_amount
-                # transaction = {'transaction': 'withdraw', 'category': 'need to fill in', 'amount': deduct_amount }
                 append_dict(transaction)
                 valid_input = True
             except:
@@ -63,19 +46,6 @@ def withdraw_balance():
 
 # ------------------------------------
 def deposit_balance():
-#    some code to build the dictionary
-#     like this   transaction = {'transaction': 'deposit', 'category': 'open account', 'amount':25.00 }
-    c = input('Category for deposit? ')
-    print('\n')
-    a = int(input('Amount to credit? '))
-    print('\n')
-    transaction = {}
-    transaction['transaction'] = 'deposit'
-    transaction['category'] = c
-    transaction['amount'] = a
-    transaction['date'] = str(d.date.today())
-    transaction['time'] = str(d.datetime.now().time())
-    # transaction = {'transaction': 'withdraw', 'category': 'need to fill in', 'amount': -25.00 }
     valid_input = False
     credit_amount = 0
     while valid_input == False:
@@ -94,26 +64,19 @@ def deposit_balance():
                 transaction['amount'] = credit_amount
                 transaction['date'] = str(d.date.today())
                 transaction['time'] = str(d.datetime.now().time())
-                transaction = {'transaction': 'deposit', 'category': 'need to fill in', 'amount': credit_amount }
                 append_dict(transaction)
                 valid_input = True
+                print('Your current balance is now ${:,.2f}'.format(get_balance()))
             except:
                 print('Invalid input')
-
     return credit_amount    
-    
-    
-    
-    
-    # transaction = {'transaction': 'deposit', 'category': 'need to fill in', 'amount': 25.00 }
-
-    append_dict(transaction)
-    return print('Your current balance is now ${:,.2f}'.format(get_balance()))
 
 # -------------------------------------
 def transaction_history():
-    for transaction in data:
-        print(transaction)
+    print('    Date   |      Time       |   Transaction  |   Amount   |  Category')
+    print('-----------|-----------------|----------------|------------|-----------')
+    for i in data:
+        print('{:^5} | {:^5} | {:^14} | {:^10} | {:^9}'.format(i['date'], i['time'], i['transaction'], i['amount'], i['category']))
     
 
 # -------------------------------------
@@ -122,22 +85,26 @@ def category_transactions():
     print('\n')
     n = 0
     amount_total = 0
+    print('    Date   |      Time       |   Transaction  |   Amount   |  Category')
+    print('-----------|-----------------|----------------|------------|-----------')
     for i in data:
         if i['category'] == defined_category:
-            print(i)
+            print('{:^5} | {:^5} | {:^14} | {:^10} | {:^9}'.format(i['date'], i['time'], i['transaction'], i['amount'], i['category']))
             n += 1
             amount_total = amount_total + i['amount']
     print('There are a total of {} transaction(s) totaling an amount of ${:,.2f}'.format(n, amount_total))
 
 # -------------------------------------
 def day_search():
-    defined_day = input('What day would you like to see transactions for? (Enter in format YYYY-MM-DD)')
+    defined_day = input('What day would you like to see transactions for? (Enter in format YYYY-MM-DD) ')
     print('\n')
     n = 0
     amount_total = 0
+    print('    Date   |      Time       |   Transaction  |   Amount   |  Category')
+    print('-----------|-----------------|----------------|------------|-----------')
     for i in data:
         if i['date'] == defined_day:
-            print(i)
+            print('{:^5} | {:^5} | {:^14} | {:^10} | {:^9}'.format(i['date'], i['time'], i['transaction'], i['amount'], i['category']))
             n += 1
             amount_total = amount_total + i['amount']
     print('There are a total of {} transaction(s) totaling an amount of ${:,.2f}'.format(n, amount_total))
@@ -150,7 +117,6 @@ while user_choice != 4:
     print('1) View current balance')
     print('2) Record a debit (withdraw)')
     print('3) Record a credit (deposit)')
-<<<<<<< HEAD
     print('4) View transaction history')
     print('5) View transactions from a category')
     print('6) View transactions on a certain day')

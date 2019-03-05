@@ -1,22 +1,22 @@
-# setup user input loop
-# ----------  write a dummy file to start off with
-import json
+# # setup user input loop
+# # ----------  write a dummy file to start off with
+# import json
 
-#    create a dummy file
+# #    create a dummy file
 # trans = {"transaction": "deposit", "category": "initial", "amount": 550.50}
-json.dump(trans, open("Codeup_checkbook.txt",'w'))
-trans = {"transaction": "deposit", "category": "paycheck", "amount": 2200.99}
-json.dump(trans, open("Codeup_checkbook.txt",'a'))
-trans = {"transaction": "deposit", "category": "tax refund", "amount": 1.00}
-json.dump(trans, open("Codeup_checkbook.txt",'a'))
-trans = {"transaction": "deposit", "category": "sold bike", "amount": 8000.00}
-json.dump(trans, open("Codeup_checkbook.txt",'a'))
-trans = {"transaction": "withdrawl", "category": "rent", "amount": 500.00}
-json.dump(trans, open("Codeup_checkbook.txt",'a'))
-trans = {"transaction": "withdrawl", "category": "utilities", "amount": 150.80}
-json.dump(trans, open("Codeup_checkbook.txt",'a'))
-trans = {"transaction": "withdrawl", "category": "groceries", "amount": 682.15}
-json.dump(trans, open("Codeup_checkbook.txt",'a'))
+# json.dump(trans, open("Codeup_checkbook.txt",'w'))
+# trans = {"transaction": "deposit", "category": "paycheck", "amount": 2200.99}
+# json.dump(trans, open("Codeup_checkbook.txt",'a'))
+# trans = {"transaction": "deposit", "category": "tax refund", "amount": 1.00}
+# json.dump(trans, open("Codeup_checkbook.txt",'a'))
+# trans = {"transaction": "deposit", "category": "sold bike", "amount": 8000.00}
+# json.dump(trans, open("Codeup_checkbook.txt",'a'))
+# trans = {"transaction": "withdrawl", "category": "rent", "amount": 500.00}
+# json.dump(trans, open("Codeup_checkbook.txt",'a'))
+# trans = {"transaction": "withdrawl", "category": "utilities", "amount": 150.80}
+# json.dump(trans, open("Codeup_checkbook.txt",'a'))
+# trans = {"transaction": "withdrawl", "category": "groceries", "amount": 682.15}
+# json.dump(trans, open("Codeup_checkbook.txt",'a'))
 
 
 
@@ -24,29 +24,34 @@ json.dump(trans, open("Codeup_checkbook.txt",'a'))
 
 # ---------------------------------
 def get_balance():
-    current_balance = 1.4
-    print('calling get_balance')
-    return current_balance
+    with open('transactions.txt') as w:
+        amounts = w.readlines()
+        float_amounts = []
+        for i in amounts:
+            float_amounts.append(float(i))
+        print('Your balance is ${:,.2f}'.format(sum(float_amounts)))
+
 # ----------------------------------
 def withdraw_balance():
-    current_balance = 1.4
-    print('calling withdraw_balance')
-    return current_balance
+    amount = float(input('What amount would you like to withdraw? '))
+    with open('transactions.txt', 'a') as w:
+        w.write('{}\n'.format(amount * -1))
+
 # ------------------------------------
 def deposit_balance():
-    current_balance = 1.4
-    print('calling deposit_balance')
-    return current_balance
+    amount = float(input('What amount would you like to deposit? '))
+    with open('transactions.txt', 'a') as w:
+        w.write('{}\n'.format(amount))
 
 # -------------------------------------
 print("-----  Welcome to your terminal checkbook! -----")
 user_choice = 0
 while user_choice != 4:  
-    print('1) view current balance')
-    print('2) record a debit (withdraw)')
-    print('3) record a credit (deposit)')
-    print('4) exit')
-    user_choice = input('What would youlike to do? Please choose 1-4')
+    print('1) View current balance')
+    print('2) Record a debit (withdraw)')
+    print('3) Record a credit (deposit)')
+    print('4) Exit')
+    user_choice = input('What would you like to do? Please choose 1-4: ')
     if user_choice.isdigit() == True:
         print('isdigit')
         if int(user_choice) == 1:
@@ -72,18 +77,18 @@ print('terminal checkbook closed')
 checkbook = [
     {
         'transaction': 'withdraw',
-        'category': 'entertainment'
-        'amount': 0,
+        'category': 'entertainment',
+        'amount': 0
     },
     {
         'transaction': 'deposit',
-        'category': 'paycheck'
-        'amount': 0,
+        'category': 'paycheck',
+        'amount': 0
     },
     {
         'transaction': 'inquiry',
-        'category': ''
-        'amount': 0,
+        'category': '',
+        'amount': 0
     },
 ]
 

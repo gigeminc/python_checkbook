@@ -1,23 +1,25 @@
 # setup user input loop
 # ----------  write a dummy file to start off with
 import json
-
-#    create a dummy file
-# trans = {"transaction": "deposit", "category": "initial", "amount": 550.50}
-json.dump(trans, open("Codeup_checkbook.txt",'w'))
-trans = {"transaction": "deposit", "category": "paycheck", "amount": 2200.99}
-json.dump(trans, open("Codeup_checkbook.txt",'a'))
-trans = {"transaction": "deposit", "category": "tax refund", "amount": 1.00}
-json.dump(trans, open("Codeup_checkbook.txt",'a'))
-trans = {"transaction": "deposit", "category": "sold bike", "amount": 8000.00}
-json.dump(trans, open("Codeup_checkbook.txt",'a'))
-trans = {"transaction": "withdrawl", "category": "rent", "amount": 500.00}
-json.dump(trans, open("Codeup_checkbook.txt",'a'))
-trans = {"transaction": "withdrawl", "category": "utilities", "amount": 150.80}
-json.dump(trans, open("Codeup_checkbook.txt",'a'))
-trans = {"transaction": "withdrawl", "category": "groceries", "amount": 682.15}
-json.dump(trans, open("Codeup_checkbook.txt",'a'))
-
+filename = "Codeup_checkbook.txt"
+checkbook_lst = [
+    {
+        'transaction': 'append test2',
+        'category': 'giraffe',
+        'amount': 150.34
+    },
+]
+with open(filename, 'a', encoding='utf-8') as file:
+    for item in checkbook_lst:
+        x = json.dumps(item, indent=4)
+        file.write(x + '\n')
+#  now read it back
+with open(filename, "r") as read_file:
+    transactions = json.load(read_file)
+    for x in transactions:
+         transamount = transactions['amount']
+         action = transaction['category']
+         print(transamount, action)
 
 
 

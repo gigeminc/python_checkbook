@@ -1,4 +1,27 @@
 # setup user input loop
+# ----------  write a dummy file to start off with
+import json
+
+#    create a dummy file
+# trans = {"transaction": "deposit", "category": "initial", "amount": 550.50}
+json.dump(trans, open("Codeup_checkbook.txt",'w'))
+trans = {"transaction": "deposit", "category": "paycheck", "amount": 2200.99}
+json.dump(trans, open("Codeup_checkbook.txt",'a'))
+trans = {"transaction": "deposit", "category": "tax refund", "amount": 1.00}
+json.dump(trans, open("Codeup_checkbook.txt",'a'))
+trans = {"transaction": "deposit", "category": "sold bike", "amount": 8000.00}
+json.dump(trans, open("Codeup_checkbook.txt",'a'))
+trans = {"transaction": "withdrawl", "category": "rent", "amount": 500.00}
+json.dump(trans, open("Codeup_checkbook.txt",'a'))
+trans = {"transaction": "withdrawl", "category": "utilities", "amount": 150.80}
+json.dump(trans, open("Codeup_checkbook.txt",'a'))
+trans = {"transaction": "withdrawl", "category": "groceries", "amount": 682.15}
+json.dump(trans, open("Codeup_checkbook.txt",'a'))
+
+
+
+
+
 # ---------------------------------
 def get_balance():
     current_balance = 1.4
@@ -43,5 +66,35 @@ while user_choice != 4:
             user_choice = 0
 
 print('terminal checkbook closed')
+# -------------------------------------
+#    create a book dictionary
+
+checkbook = [
+    {
+        'transaction': 'withdraw',
+        'category': 'entertainment'
+        'amount': 0,
+    },
+    {
+        'transaction': 'deposit',
+        'category': 'paycheck'
+        'amount': 0,
+    },
+    {
+        'transaction': 'inquiry',
+        'category': ''
+        'amount': 0,
+    },
+]
 
 
+
+# genre_to_show = input('Enter a genre: ')
+# for book in books:
+#    if genre_to_show not in book['genre']:
+#        continue
+ 
+#    print('---------------')        
+#    print('- title: %s' % book['title'])    
+#    print('- author: %s' % book['author'])
+#    print('- genre: %s' % book['genre'])

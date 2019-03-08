@@ -21,15 +21,55 @@ def get_balance():
 def withdraw_balance():
 #    some code to build the dictionary
 #     like this   transaction = {'transaction': 'deposit', 'category': 'open account', 'amount':25.00 }
-    transaction = {'transaction': 'withdraw', 'category': 'need to fill in', 'amount': -25.00 }
-    append_dict(transaction)
-    current_balance = 25
-    return current_balance
+    valid_input = False
+    deduct_amount = 0
+    while valid_input == False:
+        deduct_input = input('Debit- Please input the amount to deduct : (or Q to quit)  ')
+        if deduct_input.lower() == 'q':
+            break
+        else:
+            try:
+                deduct_amount = float(deduct_input)
+                if deduct_amount > 0:
+                    deduct_amount = 0 - deduct_amount
+                transaction = {'transaction': 'withdraw', 'category': 'need to fill in', 'amount': deduct_amount }
+                append_dict(transaction)
+                valid_input = True
+            except:
+                print('Invalid input')
+
+    return deduct_amount
 # ------------------------------------
 def deposit_balance():
 #    some code to build the dictionary
 #     like this   transaction = {'transaction': 'deposit', 'category': 'open account', 'amount':25.00 }
+    valid_input = False
+    credit_amount = 0
+    while valid_input == False:
+        deduct_input = input('Deposit- Please input the amount to credit : (or Q to quit)  ')
+        if deduct_input.lower() == 'q':
+            break
+        else:
+            try:
+                credit_amount = float(deduct_input)
+                if credit_amount < 0:
+                    credit_amount = abs(credit_amount)
+                transaction = {'transaction': 'deposit', 'category': 'need to fill in', 'amount': credit_amount }
+                append_dict(transaction)
+                valid_input = True
+            except:
+                print('Invalid input')
+
+    return credit_amount    
+    
+    
+    
+    
     transaction = {'transaction': 'deposit', 'category': 'need to fill in', 'amount': 25.00 }
+
+
+
+
     append_dict(transaction)
     current_balance = 25
     return current_balance
@@ -40,10 +80,9 @@ while user_choice != 4:
     print('1) View current balance')
     print('2) Record a debit (withdraw)')
     print('3) Record a credit (deposit)')
-    print('4) Exit')
+    print('4) Exit  (Q)')
     user_choice = input('What would you like to do? Please choose 1-4: ')
     if user_choice.isdigit() == True:
-        print('isdigit')
         if int(user_choice) == 1:
             current_balance = get_balance()
             user_choice = 0
@@ -54,10 +93,12 @@ while user_choice != 4:
             current_balance = deposit_balance()
             user_choice = 0
         elif int(user_choice) == 4:
-            print('user choice = 4')
-            break    
-        else:
+            break 
+    else:
+        if user_choice.lower() == 'q':
+            user_choice = 4
+        else:  
             print('I did not undestand your choice. Please try again') 
             user_choice = 0
-
+            
 print('terminal checkbook closed')

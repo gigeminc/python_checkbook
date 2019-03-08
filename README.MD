@@ -1,0 +1,1 @@
+This is the readme file, and initialization for gigeminc, an organization for learning at Codeup    

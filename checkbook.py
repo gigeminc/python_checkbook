@@ -10,9 +10,13 @@ def append_dict(transaction):
         json.dump(data, json_file, sort_keys = True, indent = 4)
 # ---------------------------------
 def get_balance():
-    current_balance = 1.4
-    print('calling get_balance')
-    return current_balance
+    with open('transactions.txt') as w:
+        amounts = w.readlines()
+        float_amounts = []
+        for i in amounts:
+            float_amounts.append(float(i))
+        print('Your balance is ${:,.2f}'.format(sum(float_amounts)))
+
 # ----------------------------------
 def withdraw_balance():
 #    some code to build the dictionary
@@ -29,16 +33,15 @@ def deposit_balance():
     append_dict(transaction)
     current_balance = 25
     return current_balance
-
 # -------------------------------------
 print("-----  Welcome to your terminal checkbook! -----")
 user_choice = 0
 while user_choice != 4:  
-    print('1) view current balance')
-    print('2) record a debit (withdraw)')
-    print('3) record a credit (deposit)')
-    print('4) exit')
-    user_choice = input('What would youlike to do? Please choose 1-4')
+    print('1) View current balance')
+    print('2) Record a debit (withdraw)')
+    print('3) Record a credit (deposit)')
+    print('4) Exit')
+    user_choice = input('What would you like to do? Please choose 1-4: ')
     if user_choice.isdigit() == True:
         print('isdigit')
         if int(user_choice) == 1:

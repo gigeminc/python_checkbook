@@ -4,6 +4,8 @@ import datetime as d
 filename = "Codeup_checkbook.json"
 # read the entire current checkbook file into a dictionary
 data = json.load(open(filename))
+
+
 # -----------------------------------------
 def append_dict(transaction):
     data.append(transaction)
@@ -20,7 +22,6 @@ def get_balance():
     for i in data:
         all_transactions.append(i['amount'])
     return sum(all_transactions)
-    
 
 # ----------------------------------
 def withdraw_balance():
@@ -114,12 +115,20 @@ def transaction_history():
         amount_total = amount_total + i['amount']
         temp_list.append(i)
     print('There are a total of {} transaction(s) totaling an amount of ${:,.2f}'.format(n, amount_total))
-    
+
+
 
 # -------------------------------------
 def category_search():
-    defined_category = input('What category would you like to filter by? ')
+    category_lst = []
+    for i in data:
+        if i['category'].lower() not in category_lst:    
+            category_lst.append(i['category'])
+    print('Here are your current categories: ')
+    print(category_lst)        
+    defined_category = input('Please indicate a category to filter by? ( or press Q to quit) ')
     print('\n')
+
     n = 0
     amount_total = 0
     print(' id |    Date    |      Time       |   Transaction  |   Amount   |  Category   |            Description ')
@@ -133,7 +142,7 @@ def category_search():
 
 # -------------------------------------
 def day_search():
-    defined_day = input('What day would you like to see transactions for? (Enter in format YYYY-MM-DD) ')
+    defined_day = input('What day would you like to see transactions for? (Enter in format YYYY-MM-DD)  or press Q ')
     print('\n')
     n = 0
     amount_total = 0
@@ -148,7 +157,7 @@ def day_search():
 
 # -------------------------------------
 def desc_search():
-    keywords = input('Please type the keywords to search for separated by a space: ')
+    keywords = input('Please type a keyword(s) in the Description to search for: ')
     keyword_list = keywords.lower().split(' ')
     n = 0
     amount_total = 0
@@ -166,30 +175,66 @@ def desc_search():
 def modify_transaction():
     global data
     print('\n')
-    transaction_number = int(input('Choose the transaction id of the transaction you would like to modify: '))
-    print('What information would you like to modify? ')
-    print('1) Amount')
-    print('2) Category')
-    print('3) Description')
-    info_number = int(input('Please choose 1 - 3: '))
-    info_key = ''
-    if info_number == 1:
-        info_key = 'amount'
-        new_info = float(input('Enter the correct information for {}: '.format(info_key)))
-        if data[transaction_number]['transaction'] == 'withdraw':
-            if new_info > 0:
-                    new_info = 0 - new_info
-    if info_number == 2:
-        info_key = 'category'
-        new_info = input('Enter the correct information for {}: '.format(info_key))
-    if info_number == 3:
-        info_key = 'description'
-        new_info = input('Enter the correct information for {}: '.format(info_key))
-    data[transaction_number][info_key] = new_info
-    overwrite_dict(data)
-
-
-
+#   insure a valid id, max tries = 3 
+    try_count = 0
+    found_id = False
+    while found_id == False:
+        try_count += 1
+        input_str = input('Choose the transaction id of the transaction you would like to modify: or press Q ')
+        if input_str.isdigit() == True:
+            transaction_number = int(input_str)
+            for i in data:
+                if i['transaction_id'] == transaction_number:
+                    found_id = True
+            if not found_id:
+                if try_count > 3:
+                    print('Exceeded maximum tries. Returning to Modify Menu ')
+                    print('\n')
+                    print('You have chosen to modify a transaction.')
+                    print('First, choose an option below: ')          
+                    break
+                else:
+                    print('Transaction not found.  Please enter a valid transation id.')   
+        else:
+            if input_str.lower() == 'q':
+                break                 
+    if found_id == True:        
+        valid_input = False
+        try_count = 0
+        input_str = ''
+        while valid_input == False:
+            print('What information would you like to modify? ')
+            print('1) Amount')
+            print('2) Category')
+            print('3) Description')
+            info_str = input('Please choose 1 - 3: ')
+            info_key = ''            
+            if info_str.isdigit() == True:
+                info_number = int(info_str)
+                try_count += 1
+                if info_number == 1:
+                    valid_input = True
+                    info_key = 'amount'
+                    new_info = float(input('Enter the correct information for {}: '.format(info_key)))
+                    if data[transaction_number]['transaction'] == 'withdraw':
+                        if new_info > 0:
+                            new_info = 0 - new_info
+                if info_number == 2:
+                    valid_input = True
+                    info_key = 'category'
+                    new_info = input('Enter the correct information for {}: '.format(info_key))
+                if info_number == 3:
+                    valid_input = True            
+                    info_key = 'description'
+                    new_info = input('Enter the correct information for {}: '.format(info_key))
+            else:
+                if try_count > 2:
+                    break
+                else:
+                    try_count += 1    
+        if valid_input == True:
+            data[transaction_number][info_key] = new_info
+            overwrite_dict(data)
 # -------------------------------------
 def modify_menu():
     print('You have chosen to modify a transaction.')
@@ -197,6 +242,7 @@ def modify_menu():
     user_choice = 0
     while user_choice != 4:  
         print('\n')
+        print('---Modify Transaction Menu---')     
         print('1) View all transactions:')
         print('2) Search for a transaction by date:')
         print('3) Search for a transaction by category')
@@ -238,23 +284,20 @@ def modify_menu():
                 print('I did not understand your choice. Please try again') 
                 print('\n')
                 user_choice = 0
-    
-
-
-
-        
+            
 # -------------------------------------
-print("-----  Welcome to your terminal checkbook! -----")
+print("-----  Welcome to the gigeminc Terminal Checkbook! -----")
 user_choice = 0
-while user_choice != 4:  
+while user_choice != 9:  
     print('\n')
+    print('---Main Menu---')    
     print('1) View current balance')
     print('2) Record a debit (withdraw)')
     print('3) Record a credit (deposit)')
     print('4) View transaction history')
     print('5) View transactions from a category')
     print('6) View transactions on a certain date')
-    print('7) Search transactions by keywords')
+    print('7) Search transactions by Description')
     print('8) Modify a transaction')
     print('9) Exit')
     print('\n')
@@ -296,10 +339,11 @@ while user_choice != 4:
             user_choice = 0
     else:
         if user_choice.lower() == 'q':
-            user_choice = 7
+            user_choice = 9
         else:
             print('I did not understand your choice. Please try again') 
             print('\n')
             user_choice = 0
             
-print('terminal checkbook closed')
+print('\n')
+print('The gigeminc Terminal Checkbook is now closed.   Thank you!')

@@ -1,0 +1,56 @@
+[
+    {
+        "amount": 500.0,
+        "category": "Initial",
+        "date": "2019-03-10",
+        "description": "first time deposit",
+        "time": "15:57:02.503280",
+        "transaction": "deposit",
+        "transaction_id": 0
+    },
+    {
+        "amount": 1850.45,
+        "category": "payroll",
+        "date": "2019-03-10",
+        "description": "bi-weekly",
+        "time": "15:57:26.140862",
+        "transaction": "deposit",
+        "transaction_id": 1
+    },
+    {
+        "amount": 750.0,
+        "category": "rental",
+        "date": "2019-03-10",
+        "description": "4 days AirBnb beach house",
+        "time": "15:58:10.960654",
+        "transaction": "deposit",
+        "transaction_id": 2
+    },
+    {
+        "amount": 245.0,
+        "category": "refund",
+        "date": "2019-03-10",
+        "description": "utility company",
+        "time": "15:59:22.992780",
+        "transaction": "deposit",
+        "transaction_id": 3
+    },
+    {
+        "amount": -88.0,
+        "category": "groceries",
+        "date": "2019-03-10",
+        "description": "costs too much",
+        "time": "17:29:31.071089",
+        "transaction": "withdraw",
+        "transaction_id": 4
+    },
+    {
+        "amount": -22.0,
+        "category": "q",
+        "date": "2019-03-10",
+        "description": "q",
+        "time": "18:28:08.973510",
+        "transaction": "withdraw",
+        "transaction_id": 5
+    }
+]
